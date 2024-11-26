@@ -1,99 +1,105 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<!-- Compiled and minified CSS -->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-<title>Eventos</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet">
+    <title>Detalhes do Evento</title>
 </head>
 <body>
-	<div th:replace="~{menu :: menu}"></div>
-	<div class="container">
+    <div th:replace="~{menu :: menu}"></div>
 
-		<h1>Detalhes do evento</h1>
+    <div class="container">
+        <h1>Detalhes do Evento</h1>
 
+       
+        <p th:if="${mensagem}" th:text="${mensagem}" class="green-text"></p>
+        
+     
+        <p th:if="${mensagemErro}" th:text="${mensagemErro}" class="red-text"></p>
 
-		<div class="row">
-			<div class="col s12">
-				<div class="card ">
-					<div class="card-content">
-						<span class="card-title">Evento</span>
-						<p>
-							<strong>Id: </strong> <span th:text="${evento.id}">1</span>
-						</p>
-						<p>
-							<strong>Nome: </strong> <span th:text="${evento.nome}">Aniversário
-								de José</span>
-						</p>
-						<p>
-							<strong>Local: </strong> <span th:text="${evento.local}">Clube</span>
-						</p>
-						<p>
-							<strong>Data: </strong> <span th:text="${evento.data}">25/02/2025</span>
-						</p>
-						<p>
-							<strong>Horário: </strong> <span th:text="${evento.horario}">20:00</span>
-						</p>
-					</div>
-				</div>
-			</div>
-		</div>
+    
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Evento</span>
+                        <p><strong>Id: </strong><span th:text="${evento.id}">1</span></p>
+                        <p><strong>Nome: </strong><span th:text="${evento.nome}">Aniversário de Papagaio</span></p>
+                        <p><strong>Local: </strong><span th:text="${evento.local}">IFRN</span></p>
+                        <p><strong>Data: </strong><span th:text="${#temporals.format(evento.data)}">05/12/24</span></p>
+                        <p><strong>Horário: </strong><span th:text="${evento.horario}">22:00</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-		<div class="row">
-			<div class="col s12">
-				<div class="card ">
-					<div class="card-content">
-						<span class="card-title">Adicionar convidado:</span>
-						<form action="" method="post">
-							<div>
-								<label>Nome: </label> <input type="text" name="nome">
-							</div>
+      
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Adicionar Convidado</span>
+                        <form th:action="@{/eventos/{idEvento}(idEvento=${evento.id})}" method="post" th:object="${convidado}">
+                            <div>
+                                <input type="hidden" th:field="*{id}" readonly="readonly">
+                            </div>
+                            <div>
+                                <label>Nome: </label>
+                                <input type="text" th:field="*{nome}">
+                                <p th:errors="*{nome}" style="color:red;"></p>
+                            </div>
+                            <div>
+                                <label>RG: </label>
+                                <input type="text" th:field="*{rg}">
+                                <p th:errors="*{rg}" style="color:red;"></p>
+                            </div>
+                            <div>
+                                <button type="submit" class="btn">Salvar</button>
+                                <button type="reset" class="btn">Limpar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-							<div>
-								<label>RG: </label> <input type="text" name="rg">
-							</div>
+        
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Convidados</span>
+                        <table class="highlight">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Nome</th>
+                                    <th>RG</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="c : ${convidados}">
+                                    <td th:text="${c.id}">1</td>
+                                    <td th:text="${c.nome}">Juliana</td>
+                                    <td th:text="${c.rg}">123</td>
+                                    <td>
+                                        <a th:href="@{/eventos/{idEvento}/convidados/{idConvidado}/selecionar(idEvento=${evento.id}, idConvidado=${c.id})}"><i class="material-icons">edit</i></a>
+                                        <form th:action="@{/eventos/{idEvento}/convidados/{idConvidado}/remover(idEvento=${evento.id}, idConvidado=${c.id})}" method="post">
+                                            <button type="submit" class="delete-btn">
+                                                <i class="material-icons">delete</i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-							<div>
-								<button type="submit" class="btn">Salvar</button>
-								<button type="reset" class="btn">Limpar</button>
-							</div>
-						</form>
-
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="col s12">
-				<div class="card ">
-					<div class="card-content">
-						<span class="card-title">Convidados</span>
-						<table class="highlight">
-							<thead>
-								<tr>
-									<th>Id</th>
-									<th>Nome</th>
-									<th>RG</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr th:each="c : ${convidados}">
-                                <td th:text="${c.id}">1</td>
-                                <td th:text="${c.nome}">Natalha Maria</td>
-                                <td th:text="${c.rg}">123</td>
-								</tr>
-
-							</tbody>
-
-						</table>
-
-					</div>
-				</div>
-			</div>
-		</div>
-
-	</div>
+    </div>
 </body>
 </html>

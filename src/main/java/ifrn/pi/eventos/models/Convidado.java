@@ -5,54 +5,59 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Convidado {
-
+    
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private String nome;
-	private String rg;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@ManyToOne
-	private Eventos evento;
+    @NotBlank(message = "O nome do convidado é obrigatório")
+    private String nome;
 
-	public Long getId() {
-		return id;
-	}
+    @NotBlank(message = "O RG do convidado é obrigatório")
+    private String rg;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @ManyToOne
+    private Eventos evento;
+ 
 
-	public String getNome() {
-		return nome;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getRg() {
-		return rg;
-	}
+    public String getNome() {
+        return nome;
+    }
 
-	public void setRg(String rg) {
-		this.rg = rg;
-	}
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-	public Eventos getEvento() {
-		return evento;
-	}
+    public String getRg() {
+        return rg;
+    }
 
-	public void setEvento(Eventos evento) {
-		this.evento = evento;
-	}
+    public void setRg(String rg) {
+        this.rg = rg;
+    }
 
-	@Override
-	public String toString() {
-		return "Convidado [id=" + id + ", nome=" + nome + ", rg=" + rg + ", evento=" + evento + "]";
-	}
+    public Eventos getEvento() {
+        return evento;
+    }
 
+    public void setEvento(Eventos evento) {
+        this.evento = evento;
+    }
+    
+    @Override
+    public String toString() {
+        return "Convidado [id=" + id + ", nome=" + nome + ", rg=" + rg + ", evento=" + evento + "]";
+    }
 }

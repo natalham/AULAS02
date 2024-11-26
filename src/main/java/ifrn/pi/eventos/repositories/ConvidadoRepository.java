@@ -7,7 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ifrn.pi.eventos.models.Convidado;
 import ifrn.pi.eventos.models.Eventos;
 
-public interface ConvidadoRepository extends JpaRepository<Convidado, Long>{
+public interface ConvidadoRepository extends JpaRepository<Convidado, Long> {
+	
 	List<Convidado> findByEvento(Eventos evento);
 
 }
